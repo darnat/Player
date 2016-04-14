@@ -278,6 +278,7 @@ public class Player: UIViewController {
         self.playbackState = .Paused
         self.delegate?.playerPlaybackStateDidChange(self)
     }
+    
 
     public func stop() {
         if self.playbackState == .Stopped {
@@ -293,6 +294,19 @@ public class Player: UIViewController {
     public func seekToTime(time: CMTime) {
         if let playerItem = self.playerItem {
             return playerItem.seekToTime(time)
+        }
+    }
+    
+    public func previewThumb() -> UIImage? {
+        let generator = AVAssetImageGenerator(asset: self.asset)
+        generator.appliesPreferredTrackTransform = true
+        let time = CMTimeMake(0, self.asset.duration.timescale)
+        do {
+            let imageReference = try generator.copyCGImageAtTime(time, actualTime: nil)
+            let image = UIImage(CGImage: imageReference)
+            return image
+        } catch _ {
+            return nil
         }
     }
 
