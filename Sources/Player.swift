@@ -77,6 +77,7 @@ public protocol PlayerDelegate: class {
 
     func playerPlaybackWillStartFromBeginning(player: Player)
     func playerPlaybackDidEnd(player: Player)
+    func playerPlaybackLoop(player: Player)
 }
 
 // KVO contexts
@@ -388,6 +389,7 @@ public class Player: UIViewController {
     public func playerItemDidPlayToEndTime(aNotification: NSNotification) {
         if self.playbackLoops.boolValue == true || self.playbackFreezesAtEnd.boolValue == true {
             self.player.seekToTime(kCMTimeZero)
+            self.delegate?.playerPlaybackLoop(self)
         }
 
         if self.playbackLoops.boolValue == false {
